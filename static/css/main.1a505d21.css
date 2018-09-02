@@ -1,0 +1,2 @@
+.ninja{-webkit-animation:jump infinite .5s ease-in;animation:jump infinite .5s ease-in;-webkit-animation-direction:alternate;animation-direction:alternate}@-webkit-keyframes jump{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translate3d(0,200px,0);transform:translate3d(0,200px,0)}}@keyframes jump{0%{-webkit-transform:translateZ(0);transform:translateZ(0)}to{-webkit-transform:translate3d(0,200px,0);transform:translate3d(0,200px,0)}}
+/*# sourceMappingURL=main.1a505d21.css.map*/
