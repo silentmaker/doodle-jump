@@ -1,0 +1,10 @@
+.ninja {
+  animation: jump infinite 0.5s ease-in;
+  animation-direction: alternate;
+}
+  
+@keyframes jump {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, 200px, 0); }
+}
+  
