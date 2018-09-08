@@ -4,6 +4,8 @@ import sumoLeftImage from "../images/sumo-left.png";
 import sumoRightImage from "../images/sumo-right.png";
 import boardOneImage from "../images/board-one.png";
 import boardTwoImage from "../images/board-two.png";
+import trampolineImage from "../images/trampoline.png";
+import monsterImage from "../images/monster.png";
 
 export class Board  {
   constructor(x, y) {
@@ -16,6 +18,29 @@ export class Board  {
     this.vx = isStatic ? 0 : 1
     this.image = new Image()
     this.image.src = isStatic ? boardOneImage : boardTwoImage
+    this.hasSpring = Math.random() > 0.9
+    this.springImage = new Image()
+    this.springImage.src = trampolineImage
+  }
+  draw(context) {
+    if (this.hasSpring) {
+      context.drawImage(this.image, this.x, this.y + 14, this.width, this.height)
+      context.drawImage(this.springImage, this.x + 12, this.y - 2, 48, 16)
+    } else {
+      context.drawImage(this.image, this.x, this.y, this.width, this.height)
+    }
+  }
+}
+export class Monster {
+  constructor(x, y) {
+    this.width = 60
+    this.height = 80
+    this.x = x || 0
+    this.y = y || 0
+    this.vx = 2
+    this.vy = 2
+    this.image = new Image()
+    this.image.src = monsterImage
   }
   draw(context) {
     context.drawImage(this.image, this.x, this.y, this.width, this.height)
@@ -68,6 +93,10 @@ export class Doodle {
     this.height = this.container.clientHeight
     this.context = canvas.getContext('2d')
     this.ninja = new Ninja(this.width / 2, this.height)
+    this.monster = new Monster(this.width / 2, -Math.random() * 10 * this.height)
+    for (let i = 0; i < 7; i++) {
+      this.boards.push(new Board((this.width - 80) * Math.random(), i * 100))
+    }
 
     canvas.width = this.width
     canvas.height = this.height
@@ -77,7 +106,6 @@ export class Doodle {
       this.alphaX = e.gamma / 3
     })
     canvas.addEventListener('click', e => {
-      console.log(e)
       if (this.isOver && 
         e.clientX >= this.width / 2 - 80 && e.clientX <= this.width / 2 + 80 &&
         e.clientY >= this.height / 2 + 60 && e.clientY <= this.height / 2 + 108
@@ -87,7 +115,7 @@ export class Doodle {
     this.run()
   }
   draw() {
-    const {context, width, height, ninja, boards} = this
+    const {context, width, height, ninja, monster, boards} = this
 
     context.clearRect(0, 0, width, height)
     
@@ -109,6 +137,8 @@ export class Doodle {
       boards.map(board => board.draw(context))
       // Ninja
       ninja.draw(context)
+      // Monster
+      monster.draw(context)
       // Score
       context.textAlign = 'left'
       context.fillStyle = '#fff'
@@ -119,7 +149,7 @@ export class Doodle {
     }
   }
   calc() {
-    const {ninja, boards, gravity, width, height} = this
+    const {ninja, monster, boards, gravity, width, height} = this
 
     // Ninja
     ninja.speed -= gravity
@@ -132,13 +162,11 @@ export class Doodle {
     } else {
       ninja.y -= (ninja.speed + gravity / 2)
     }
+    if (ninja.x > monster.x - ninja.width && ninja.x < monster.x + ninja.width &&
+      ninja.y > monster.y - ninja.height && ninja.y < monster.y + monster.height
+    ) this.isOver = true
 
     // Boards
-    if (boards.length === 0) {
-      for (let i = 0; i < 7; i++) {
-        boards.push(new Board((width - 80) * Math.random(), i * 100))
-      }
-    }
     boards.map(board => {
       // Step and Jump
       if (ninja.speed < 0 && 
@@ -146,24 +174,32 @@ export class Doodle {
           ninja.x + ninja.width - 10 >= board.x && ninja.x - 10 <= board.x + board.width 
         ) {
         ninja.standpoint = board.y
-        ninja.speed = ninja.defaultSpeed
+        ninja.speed = board.hasSpring ? ninja.defaultSpeed * 2 : ninja.defaultSpeed
       }
       // Back to Top
       if (board.y > height) {
         board.x = (width - 80) * Math.random()
         board.y = 0
+        board.hasSpring = Math.random() > 0.9
       }
       // Hovering
       board.x += board.vx
-      if (board.x >= this.width - board.width || board.x <= 0) board.vx = -board.vx 
+      if (board.x >= width - board.width || board.x <= 0) board.vx = -board.vx 
       return false
     })
+
+    // Monster
+    monster.x += monster.vx
+    monster.y += monster.vy
+    if (monster.y > height) monster.y = -Math.random() * 10 * height
+    if (monster.x >= width - monster.width || monster.x <= 0) monster.vx = -monster.vx 
 
     // Screen
     const translate = ninja.speed > 0 && ninja.y < height / 2 ? (height / 2 - ninja.y) : 0
     ninja.y += translate
-    this.score += Math.round(Math.abs(translate))
+    monster.y += translate
     boards.map(board => board.y += translate)
+    this.score += Math.round(Math.abs(translate))
   }
   pause() {
     this.isPaused = !this.this.isPaused
