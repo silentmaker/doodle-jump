@@ -7,20 +7,18 @@ import boardTwoImage from "../images/board-two.png";
 
 export class Board  {
   constructor(x, y) {
+    const isStatic = Math.random() > 0.5
+
     this.x = x || 0
     this.y = y || 0
     this.width = 72
     this.height = 18
+    this.vx = isStatic ? 0 : 1
     this.image = new Image()
-    this.image.src = Math.random() > 0.5 ? boardOneImage : boardTwoImage
+    this.image.src = isStatic ? boardOneImage : boardTwoImage
   }
   draw(context) {
     context.drawImage(this.image, this.x, this.y, this.width, this.height)
-  }
-}
-export class Bullet {
-  constructor(x, y) {
-    this.direction = {x, y}
   }
 }
 export class Ninja {
@@ -58,10 +56,9 @@ export class Doodle {
 
     this.ninja = null
     this.boards = []
-    this.bullets = []
     this.score = 0
 
-    this.isPlaying = false
+    this.isOver = false
     this.isPaused = false
   }
   init() {
@@ -76,39 +73,50 @@ export class Doodle {
     canvas.height = this.height
     this.container.appendChild(canvas)
 
-    window.addEventListener("deviceorientation", e => {
+    window.addEventListener('deviceorientation', e => {
       this.alphaX = e.gamma / 3
+    })
+    canvas.addEventListener('click', e => {
+      console.log(e)
+      if (this.isOver && 
+        e.clientX >= this.width / 2 - 80 && e.clientX <= this.width / 2 + 80 &&
+        e.clientY >= this.height / 2 + 60 && e.clientY <= this.height / 2 + 108
+      ) this.restart()
     })
 
     this.run()
-  }
-  play() {
-    this.isPlaying = false
-  }
-  end() {
-    this.isPlaying = false
-  }
-  pause() {
-    this.isPaused = true
-  }
-  resume() {
-    this.isPaused = false
   }
   draw() {
     const {context, width, height, ninja, boards} = this
 
     context.clearRect(0, 0, width, height)
+    
+    if (this.isOver) {
+      // restart
+      context.textAlign = 'center'
+      context.fillStyle = '#fff'
+      context.font = '40px Arial'
+      context.fillText('Game Over', width / 2, height / 2 - 20)
+      context.font = '20px Arial'
+      context.fillText(`Your Score: ${this.score}`, width / 2, height / 2 + 20)
+      context.rect(width / 2 - 80, height / 2 + 60, 160, 48)
+      context.fill()
+      context.fillStyle = '#203243'
+      context.font = '24px Arial'
+      context.fillText('RESTART', width / 2, height / 2 + 92)
+    } else {
+      // Boards
+      boards.map(board => board.draw(context))
+      // Ninja
+      ninja.draw(context)
+      // Score
+      context.textAlign = 'left'
+      context.fillStyle = '#fff'
+      context.font = '20px Arial';
+      context.fillText(`Score: ${this.score}`,15,30);
 
-    // Boards
-    boards.map(board => board.draw(context))
-    // Ninja
-    ninja.draw(context)
-    // Score
-    context.fillStyle = '#fff'
-    context.font = "20px Arial";
-    context.fillText(`得分：${this.score}`,15,35);
-
-    this.calc()
+      this.calc()
+    }
   }
   calc() {
     const {ninja, boards, gravity, width, height} = this
@@ -119,15 +127,20 @@ export class Doodle {
     ninja.facing = this.alphaX < 0 ? 'left' : 'right'
     if (ninja.x < 0) ninja.x = width
     if (ninja.x > width) ninja.x = 0
-    ninja.y -= (ninja.speed + gravity / 2)
+    if (ninja.y > height) {
+      this.isOver = true
+    } else {
+      ninja.y -= (ninja.speed + gravity / 2)
+    }
 
     // Boards
     if (boards.length === 0) {
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 7; i++) {
         boards.push(new Board((width - 80) * Math.random(), i * 100))
       }
     }
     boards.map(board => {
+      // Step and Jump
       if (ninja.speed < 0 && 
           board.y <= ninja.y + ninja.height && board.y + 20 >= ninja.y + ninja.height && 
           ninja.x + ninja.width - 10 >= board.x && ninja.x - 10 <= board.x + board.width 
@@ -135,10 +148,14 @@ export class Doodle {
         ninja.standpoint = board.y
         ninja.speed = ninja.defaultSpeed
       }
+      // Back to Top
       if (board.y > height) {
         board.x = (width - 80) * Math.random()
         board.y = 0
       }
+      // Hovering
+      board.x += board.vx
+      if (board.x >= this.width - board.width || board.x <= 0) board.vx = -board.vx 
       return false
     })
 
@@ -148,8 +165,17 @@ export class Doodle {
     this.score += Math.round(Math.abs(translate))
     boards.map(board => board.y += translate)
   }
+  pause() {
+    this.isPaused = !this.this.isPaused
+  }
+  restart() {
+    this.isOver = false
+    this.ninja.y = this.height
+    this.ninja.speed = this.ninja.defaultSpeed
+    this.score = 0
+  }
   run() {
-    !this.isPaused && this.draw()
+    !(this.isPaused) && this.draw()
     requestAnimationFrame(this.run.bind(this))
   }
 }
