@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Doodle } from "./Basic"
 
+import moutainImage from "../images/mountain.png";
 import '../styles/Game.css';
 
 export class Game extends Component {
@@ -11,8 +12,11 @@ export class Game extends Component {
   }
   render() {
     return (
-      <div id="game">
-        <div id="console-log"></div>
+      <div>
+        <div id="mountain">
+          <img src={moutainImage} alt="mountain"/>
+        </div>
+        <div id="game"></div>
       </div>
     )
   }

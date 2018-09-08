@@ -1,17 +1,24 @@
-#game {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url(../images/bg.png)
 }
 
-#console-log {
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  padding: 5px;
-  text-align: center;
+#mountain {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
   width: 100%;
-  height: 20px;
+}
+#mountain img {
+  width: 100%;
+  max-width: 100%;
+}
+
+#game {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
