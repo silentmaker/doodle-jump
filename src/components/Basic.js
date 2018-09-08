@@ -1,15 +1,17 @@
+import ninjaImage from "../images/ninja.png";
+import boardImage from "../images/board.png";
+
 export class Board  {
   constructor(x, y) {
     this.x = x || 0
     this.y = y || 0
-    this.width = 80
-    this.height = 20
+    this.width = 72
+    this.height = 18
+    this.image = new Image()
+    this.image.src = boardImage
   }
   draw(context) {
-    context.beginPath()
-    context.rect(this.x, this.y, this.width, this.height)
-    context.fillStyle = 'green'
-    context.fill()
+    context.drawImage(this.image, this.x, this.y, this.width, this.height)
   }
 }
 export class Bullet {
@@ -20,18 +22,19 @@ export class Bullet {
 export class Ninja {
   constructor(x, y) {
     this.facing = 'left'
-    this.defaultSpeed = 20
+    this.defaultSpeed = 15
     this.speed = this.defaultSpeed
+    this.width = 60
+    this.height = 60
     this.x = x || 0
     this.y = y || 0
     this.distance = y || 0
     this.standpoint = y || 0
+    this.image = new Image()
+    this.image.src = ninjaImage
   }
   draw(context) {
-    context.beginPath()
-    context.rect(this.x, this.y, 30, 60)
-    context.fillStyle = 'yellow'
-    context.fill()
+    context.drawImage(this.image, this.x, this.y, this.width, this.height)
   }
 }
 export class Doodle {
@@ -64,7 +67,7 @@ export class Doodle {
     this.container.appendChild(canvas)
 
     window.addEventListener("deviceorientation", e => {
-      this.alphaX = e.alpha / 10
+      this.alphaX = e.gamma / 3
     })
 
     this.run()
@@ -108,12 +111,15 @@ export class Doodle {
 
     // Boards
     if (boards.length === 0) {
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 8; i++) {
         boards.push(new Board((width - 80) * Math.random(), i * 100))
       }
     }
     boards.map(board => {
-      if (ninja.speed < 0 && board.y <= (ninja.y + 60) && (board.y + 20) >= (ninja.y + 60) && ninja.x >= board.x && ninja.x <= board.x + board.width) {
+      if (ninja.speed < 0 && 
+          board.y <= ninja.y + ninja.height && board.y + 20 >= ninja.y + ninja.height && 
+          ninja.x + 10 >= board.x && ninja.x + 10 <= board.x + board.width 
+        ) {
         ninja.standpoint = board.y
         ninja.speed = ninja.defaultSpeed
       }

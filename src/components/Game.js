@@ -11,7 +11,9 @@ export class Game extends Component {
   }
   render() {
     return (
-      <div id="game"></div>
+      <div id="game">
+        <div id="console-log"></div>
+      </div>
     )
   }
 }
