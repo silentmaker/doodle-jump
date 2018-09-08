@@ -18,7 +18,7 @@ export class Board  {
     this.vx = isStatic ? 0 : 1
     this.image = new Image()
     this.image.src = isStatic ? boardOneImage : boardTwoImage
-    this.hasSpring = Math.random() > 0.9
+    this.hasSpring = false
     this.springImage = new Image()
     this.springImage.src = trampolineImage
   }
@@ -180,7 +180,7 @@ export class Doodle {
       if (board.y > height) {
         board.x = (width - 80) * Math.random()
         board.y = 0
-        board.hasSpring = Math.random() > 0.9
+        board.hasSpring = Math.random() > 0.95
       }
       // Hovering
       board.x += board.vx
