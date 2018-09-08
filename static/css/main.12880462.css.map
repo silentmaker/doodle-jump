@@ -1,0 +1,1 @@
+{"version":3,"sources":["styles/Game.css"],"names":[],"mappings":"AAAA,MACE,eACA,SACA,UACA,WACA,WAAa","file":"static/css/main.12880462.css","sourcesContent":["#game {\n  position: fixed;\n  top: 20px;\n  left: 20px;\n  right: 20px;\n  bottom: 20px;\n}\n\n\n// WEBPACK FOOTER //\n// ./src/styles/Game.css"],"sourceRoot":""}
