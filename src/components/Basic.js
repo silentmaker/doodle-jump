@@ -53,8 +53,8 @@ export class Ninja {
     this.facing = 'left'
     this.defaultSpeed = 15
     this.speed = this.defaultSpeed
-    this.width = 60
-    this.height = 60
+    this.width = 80
+    this.height = 64
     this.x = x || 0
     this.y = y || 0
     this.distance = y || 0
@@ -208,6 +208,7 @@ export class Doodle {
     this.isOver = false
     this.ninja.y = this.height
     this.ninja.speed = this.ninja.defaultSpeed
+    this.monster.y = -Math.random() * 10 * this.height
     this.score = 0
   }
   run() {
