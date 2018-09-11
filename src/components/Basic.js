@@ -120,7 +120,7 @@ export class Doodle {
     context.clearRect(0, 0, width, height)
     
     if (this.isOver) {
-      // restart
+      // Game Over
       context.textAlign = 'center'
       context.fillStyle = '#fff'
       context.font = '40px Arial'
@@ -171,7 +171,7 @@ export class Doodle {
       // Step and Jump
       if (ninja.speed < 0 && 
           board.y <= ninja.y + ninja.height && board.y + 20 >= ninja.y + ninja.height && 
-          ninja.x + ninja.width - 10 >= board.x && ninja.x - 10 <= board.x + board.width 
+          ninja.x + ninja.width - 20 >= board.x && ninja.x + 20 <= board.x + board.width 
         ) {
         ninja.standpoint = board.y
         ninja.speed = board.hasSpring ? ninja.defaultSpeed * 2 : ninja.defaultSpeed
