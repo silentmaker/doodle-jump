@@ -1,9 +1,14 @@
 {
-  "main.css": "static/css/main.3f25cfac.css",
-  "main.css.map": "static/css/main.3f25cfac.css.map",
-  "main.js": "static/js/main.446d6435.js",
-  "main.js.map": "static/js/main.446d6435.js.map",
-  "static/media/monster.png": "static/media/monster.dc076390.png",
-  "static/media/mountain.png": "static/media/mountain.88aa0e01.png",
-  "static/media/ninja-left.png": "static/media/ninja-left.7a00f58d.png"
+  "main.css": "static/css/main.29c4401e.css",
+  "main.css.map": "static/css/main.29c4401e.css.map",
+  "main.js": "static/js/main.d1e4a478.js",
+  "main.js.map": "static/js/main.d1e4a478.js.map",
+  "static\\media\\bg.png": "static/media/bg.cd69730d.png",
+  "static\\media\\board-one.png": "static/media/board-one.70611846.png",
+  "static\\media\\monster.png": "static/media/monster.dc076390.png",
+  "static\\media\\mountain.png": "static/media/mountain.88aa0e01.png",
+  "static\\media\\ninja-left.png": "static/media/ninja-left.01c31a04.png",
+  "static\\media\\ninja-right.png": "static/media/ninja-right.ab6487cc.png",
+  "static\\media\\sumo-left.png": "static/media/sumo-left.f11ad382.png",
+  "static\\media\\sumo-right.png": "static/media/sumo-right.856c8c83.png"
 }
