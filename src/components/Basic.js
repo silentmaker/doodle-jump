@@ -155,8 +155,8 @@ export class Doodle {
     ninja.speed -= gravity
     ninja.x += this.alphaX
     ninja.facing = this.alphaX < 0 ? 'left' : 'right'
-    if (ninja.x < 0) ninja.x = width
-    if (ninja.x > width) ninja.x = 0
+    if (ninja.x + ninja.width / 2 < 0) ninja.x = width - ninja.width / 2
+    if (ninja.x + ninja.width / 2 > width) ninja.x = ninja.width / 2
     if (ninja.y > height) {
       this.isOver = true
     } else {
