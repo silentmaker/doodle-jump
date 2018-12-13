@@ -94,7 +94,7 @@ export class Doodle {
     this.context = canvas.getContext('2d')
     this.ninja = new Ninja(this.width / 2, this.height)
     this.monster = new Monster(this.width / 2, -Math.random() * 10 * this.height)
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 8; i++) {
       this.boards.push(new Board((this.width - 80) * Math.random(), i * 100))
     }
 
